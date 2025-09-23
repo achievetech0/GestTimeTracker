@@ -12,7 +12,12 @@ import Cocoa
 class AppDelegate: NSObject, NSApplicationDelegate {
     
     // Components:
-    let statusbarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
+    let statusbarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+    
+    let customView = NSStackView()
+    var timeView: NSButton?
+    var jobView: NSTextView?
+    
     var panRecognizer = NSPanGestureRecognizer(target: self, action: #selector(setTimer(_:)))
     var wc : WC? = nil
     var Timer : TimerController = TimerController()
@@ -23,7 +28,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     let timeSteps : Int = 120 // 2h a 60 Min
     
-    let minHeight : Int = 100
+    let minHeight : Int = 50
     let heightLimiter : Int = 100
     let adjustment : Int = 4
     
@@ -32,18 +37,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Setup Menu
         statusbarItem.menu = constructMenu()
         
-        // Setup StatusBar Item Button
         if let button = statusbarItem.button {
             button.image = NSImage(named:NSImage.Name("clock"))
             
+            // 确保你的状态栏项目长度是可变的，以适应文本长度
+            statusbarItem.length = NSStatusItem.variableLength
+            
             // Configure Events
             button.target = self
+            // 将手势识别器直接添加到这个单一的按钮上
             button.addGestureRecognizer(panRecognizer)
             
             // Initialize Button for Timer
             Timer.initialize(statusBarButton: button, statusBarMenu: statusbarItem.menu!)
-        }
+            
+            // 可变长度
+            statusbarItem.length = NSStatusItem.variableLength
+            }
         
+      
         // Window Setup
         let sb = NSStoryboard(name: "Main", bundle: nil)
         wc = sb.instantiateController(withIdentifier: "Classic") as? WC;
@@ -51,6 +63,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Starting App
         print("Starting App...")
     }
+    
     
     func applicationWillTerminate(_ aNotification: Notification) {
         Timer.stop()
@@ -81,11 +94,32 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
+    @objc func jobNameChanged(_ sender: NSTextField) {
+        // 更新状态栏按钮显示
+        Timer.setJobName(jobName: sender.stringValue)
+    }
+    
     // ===================================================================
     func constructMenu() -> NSMenu {
         let menu = NSMenu()
-        
         menu.addItem(NSMenuItem(title: "", action: nil, keyEquivalent: ""))
+        menu.addItem(NSMenuItem.separator())
+
+        // --- 输入框 ---
+        let inputItem = NSMenuItem()
+        let textField = NSTextField(frame: NSRect(x: 0, y: 0, width: 200, height: 22))
+        textField.placeholderString = "请输入任务名称"
+        textField.isBordered = true
+        textField.bezelStyle = .roundedBezel
+        textField.target = self
+        textField.action = #selector(jobNameChanged(_:))
+        textField.isEditable = true
+        textField.isSelectable = true
+
+        inputItem.view = textField
+        menu.addItem(inputItem)
+        
+        menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Stoppen", action: #selector(stopTimer), keyEquivalent: "x"))
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Beenden", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
