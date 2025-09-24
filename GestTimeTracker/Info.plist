@@ -17,11 +17,15 @@
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>1.1</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
+	<key>LSUIElement</key>
+	<true/>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string></string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2019 TinkeringAround. All rights reserved.</string>
 	<key>NSMainStoryboardFile</key>
@@ -30,13 +34,9 @@
 	<string>NSApplication</string>
 	<key>NSSupportsAutomaticTermination</key>
 	<true/>
-	<key>LSUIElement</key>
+	<key>NSSupportsSuddenTermination</key>
 	<true/>
 	<key>NSUserNotificationAlertStyle</key>
 	<string>alert</string>
-	<key>NSSupportsSuddenTermination</key>
-	<true/>
-	<key>NSCalendarsFullAccessUsageDescription</key>
-	<string></string>
 </dict>
 </plist>

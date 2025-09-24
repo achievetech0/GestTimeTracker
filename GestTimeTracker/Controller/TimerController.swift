@@ -13,7 +13,6 @@ class TimerController  {
     
     // Components
     var statusBarButton: NSButton? = nil
-    var statusBarMenu: NSMenu? = nil
     var timer : Timer? = nil
     let progressBar: ProgressBar = ProgressBar(frame: CGRect(x: 0, y: 0, width: 30, height: 22))
     let notification: NSUserNotification = NSUserNotification()
@@ -31,9 +30,8 @@ class TimerController  {
 
     
     // ===================================================================
-    func initialize(statusBarButton: NSStatusBarButton, statusBarMenu: NSMenu) -> Void {
+    func initialize(statusBarButton: NSStatusBarButton ) -> Void {
         self.statusBarButton = statusBarButton
-        self.statusBarMenu = statusBarMenu
         
         notification.title = "Tinkering Timer"
         notification.setValue(NSImage(named: "AppIcon"), forKey: "_identityImage")
@@ -136,9 +134,6 @@ class TimerController  {
     func stop() -> Void {
         self.timer?.invalidate()
         
-        // Remove MenuItem
-        statusBarMenu!.items[0].isHidden = true
-        
         // Reset StatusBar Image
         progressBar.removeFromSuperview()
         statusBarButton?.image = NSImage(named:NSImage.Name("clock"))
@@ -220,7 +215,7 @@ class TimerController  {
             showNotification()
             stop()
         } else {
-            statusBarMenu!.items[0].title = remainingTime()
+//            statusBarMenu!.items[0].title = remainingTime()
 //            progressBar.update(seconds: seconds)
             statusBarButton?.attributedTitle = formatString(seconds: seconds)
         }
@@ -228,7 +223,7 @@ class TimerController  {
     
     func setJobName(jobName:String){
         self.jobName = jobName
-        statusBarMenu!.items[0].title = remainingTime()
+//        statusBarMenu!.items[0].title = remainingTime()
         statusBarButton?.attributedTitle = formatString(seconds: seconds)
     }
 }
