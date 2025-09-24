@@ -24,7 +24,7 @@ class TimerController  {
     var steps : Int = 10
     let numberUpdates : Int = 60
     
-    @Published var jobName : String = "拖拽这里"
+    @Published var jobName : String = "drag here"
     var startDate: Date = Date()
     var endDate: Date = Date()
     let eventStore = EKEventStore()
