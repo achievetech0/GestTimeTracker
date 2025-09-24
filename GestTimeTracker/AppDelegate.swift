@@ -8,6 +8,7 @@
 
 import Cocoa
 
+
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
     
@@ -21,6 +22,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var panRecognizer = NSPanGestureRecognizer(target: self, action: #selector(setTimer(_:)))
     var wc : WC? = nil
     var Timer : TimerController = TimerController()
+    let jobTextField: NSTextField = {
+        let tf = NSTextField(frame: NSRect(x: 0, y: 0, width: 200, height: 22))
+        tf.placeholderString = "请输入任务名称"
+        tf.isBordered = true
+        tf.bezelStyle = .roundedBezel
+        tf.isEditable = true
+        tf.isSelectable = true
+        tf.focusRingType = .none
+        tf.refusesFirstResponder = false
+        tf.usesSingleLineMode = true
+        tf.cell?.usesSingleLineMode = true
+        
+        tf.target = nil
+        tf.action = #selector(jobNameChanged(_:))
+        return tf
+    }()
     
     // Attributes:
     let statusBarHeight : Int = 22
@@ -62,6 +79,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         // Starting App
         print("Starting App...")
+        
+//        let start = Date()
+//        let end = start.addingTimeInterval(60 * 60)
+//        addEvent(title: "测试日历事件", startDate: start, endDate: end,calendarName:  "Tracker")
     }
     
     
@@ -97,6 +118,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @objc func jobNameChanged(_ sender: NSTextField) {
         // 更新状态栏按钮显示
         Timer.setJobName(jobName: sender.stringValue)
+        statusbarItem.menu?.cancelTracking()
     }
     
     // ===================================================================
@@ -107,16 +129,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         // --- 输入框 ---
         let inputItem = NSMenuItem()
-        let textField = NSTextField(frame: NSRect(x: 0, y: 0, width: 200, height: 22))
-        textField.placeholderString = "请输入任务名称"
-        textField.isBordered = true
-        textField.bezelStyle = .roundedBezel
-        textField.target = self
-        textField.action = #selector(jobNameChanged(_:))
-        textField.isEditable = true
-        textField.isSelectable = true
 
-        inputItem.view = textField
+        inputItem.view = jobTextField
         menu.addItem(inputItem)
         
         menu.addItem(NSMenuItem.separator())

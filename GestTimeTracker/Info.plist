@@ -36,5 +36,7 @@
 	<string>alert</string>
 	<key>NSSupportsSuddenTermination</key>
 	<true/>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string></string>
 </dict>
 </plist>
