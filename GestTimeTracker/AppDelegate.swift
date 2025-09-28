@@ -7,6 +7,8 @@
 //
 
 import Cocoa
+import ServiceManagement
+
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -51,6 +53,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     // ===================================================================
     func applicationDidFinishLaunching(_ aNotification: Notification) {
+        do {
+            try SMAppService.mainApp.register()
+            print("已添加开机启动项")
+        } catch {
+            print("开机启动添加失败: \(error)")
+        }
+        
         // 设置状态栏按钮
         if let button = statusbarItem.button {
             button.image = NSImage(named: NSImage.Name("clock"))
